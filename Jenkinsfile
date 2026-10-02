@@ -5,6 +5,10 @@ pipeline {
         nodejs 'NodeJS-Playwright'
     }
 
+    environment {
+        BASE_URL = 'https://www.saucedemo.com/'
+    }
+
     stages {
 
         stage('Verify Node.js') {
@@ -17,6 +21,26 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat 'npm ci'
+            }
+        }
+
+        stage('Install Playwright Browser') {
+            steps {
+                bat 'npx playwright install chromium'
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'saucedemo-login',
+                        usernameVariable: 'SAUCE_USERNAME',
+                        passwordVariable: 'SAUCE_PASSWORD'
+                    )
+                ]) {
+                    bat 'npx playwright test --project=chromium'
+                }
             }
         }
     }
