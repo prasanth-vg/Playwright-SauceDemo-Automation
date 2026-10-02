@@ -13,11 +13,17 @@ export class ProductLandingPage extends BasePage{
      
   }
 
-     async verifyProductTitleText():Promise<boolean>{
 
-         return await this.ProductTitle.isVisible();
+      
+         async verifyProductTitleText(): Promise<boolean>{
+          await this.ProductTitle.waitFor({ state: 'visible' });
+          return true;
+         }
 
+            //  async verifyProductTitleText():Promise<boolean>{
+
+            //      return await this.ProductTitle.isVisible();
+            //  }   
 }
 
 
-}
